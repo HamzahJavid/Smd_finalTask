@@ -1,0 +1,258 @@
+
+onCreate()  -->   when activity is first created
+onStart()   -->   when activity first becomes visible
+onResume()  -->   when user starts interacting with the activity
+onPause()   -->   activity goes back into the the back ground (partially hidden)
+onStop()    -->   activity is fully hidden
+onDestroy() -->   activity is permanently destroyed
+onRestart() -->   activity is restarted after being hidden
+
+
+What happens when back button is pressed?
+The following functions are called on the current Activity:()
+    :OnPause()->OnStop()->OnDestroy()
+
+The hidden activity calls the following functions
+    OnRestart()->OnStart()->OnResume()
+
+if an App with higher priority needs memory then the current activity goes back to
+on Create() ie:
+    OnPause()   --> OnCreate()
+    OnStop()    --> OnCreate()
+
+//The thing to be considered here is there is no fucking return from onDestroy()
+    OnStop()    --> OnRestart() --> OnStart()
+    OnStop()    --> OnCreate()  (higher priority)
+    OnPause()   --> OnCreate()  (higher priority)
+
+
+--------------------------------------------------------------------------------------
+                           Implicit Intents And Activities
+Explicit Intents//
+    Calling activity 2
+var doWork = Intent(this,Activity2.class)
+doWork.putExtra("Key","Value")//putting etxra information
+startActivity(doWork,RequestCode)
+
+---Activity 2
+//receiving data in the called activity
+STRING receivedValue=getIntent().getString(key)
+ARRAY receivedArray=getIntent().getSerializableExtra(key)
+
+
+---getting results back from Activity 2:
+in child a function called FINISH is over ridden and called explicitly:
+function finish(){
+    var dataResultToSendBack=Intent()//The Intent function() in finish() get results back thus noi neet to give refrence
+    dataResultToSendBack.putExtra("retkey1","cock sucker")
+    setResult(RESULT_OKAY,dataResultToSendBack)
+    super.finish()// called to stack back to parent activity
+}
+
+-----getting back the results in the parent Activity()
+
+
+onActivityResult(RequestCode,ResultCode,data){
+        if(RequestCode==matched and REsultCode==MAtched)
+        {
+            //get back the result
+
+            //format
+            get{DataType}Extra("Key")
+        }
+}
+
+Fragments:
+Fragment Lifecycle:
+OnAttach()->OnCreateView()->OnViewCreated()->onStrat()->OnResume()->OnPause()->OnRestrat()->OnStop()->OnDestroyView()
+->OnDestroy()->onDetach()
+
+
+            LOADING a fragment
+btn.clickListner(){
+    getSupportFragmentManager.beginTransaction().replace(R.id.fragmenContaner,newFragmentClass).addBackTostack(null)
+    .commit()
+}
+
+            :INFLATING A FRAGMENT:
+Fragment ClasOne extends Fragment{
+    onCreateView(LAYOUTINFLATER inflater,VIEWGROUP container,BUNDLE SavedInstabnce){///IMMMMMMMMMMMMMMMMMMMMMMMMPORTNATTTTTTTTTTTTTTT
+    inflater.inflate(fragment.xml,container,false)
+}
+}
+
+
+2IN Fragments we pass data using bundles
+Data can be passed from activity to fragment but not from fragment to fragment
+for passing data into a fragment we use setArguments(BUNDLE)
+
+var value="Hi hamzah"
+Fragment frag=new Fragment()
+Bundle bundle=new Bundle()
+bundle.putString("key",value)
+frag.setArguments(bundle)
+
+//getting the passed data in the fragment
+Bundle bundle=getArguments();
+var data = bundle.getString("Key")
+
+//passing data from fragment to activity
+When ever passing data from fragment to activity we first must define interface:
+
+Fragment_kid Extends Fragment{
+
+interface onDataPass{
+void dataDataRecieved(String data)
+}
+var OnDataPass dataPassListner;
+
+overide fun onAttach(Context context){
+
+try{
+dataPassListner=context
+}
+catch(ClassCastException e){
+throw (error)
+}
+if(dataPassListner !=null){
+    dataPassListner.onDataRecieved()
+}
+
+}
+
+in mainactivity just implemnt the interface dfeined over the child class
+and directly acces the text set in the data memebr of the interfcae w edefines
+}
+
+
+(Read about explicit intents)
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+Creating an custom adapter using array adapter:
+class CustomDApater(
+    context:Context
+    personList<>
+):ArrayAdpater<CustomAdapter>(context,R.layout.individualitem,list){
+
+fun getView(position,View,parent):View{
+view=Layoutinflater.from(context).inflate()
+
+}
+}
+Using recycler view and arrayAdapter differnece
+a single get view funtion
+
+Data Base FireBase
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+FirebaseAuth.getInstance()
+    .createUserWithEmailAndPassword(email, password)
+    .addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+            val user = FirebaseAuth.getInstance().currentUser
+            // User registered
+        } else {
+            // Error
+        }
+    }
+
+FirebaseAuth.getInstance()
+    .signInWithEmailAndPassword(email, password)
+    .addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+            val user = FirebaseAuth.getInstance().currentUser
+            // Login successful
+        } else {
+            // Login failed
+        }
+    }
+
+FirebaseAuth.getInstance().signOut()
+
+val user = FirebaseAuth.getInstance().currentUser
+if (user != null) {
+    val email = user.email
+    val uid = user.uid
+}
+
+FirebaseAuth.getInstance()
+    .sendPasswordResetEmail(email)
+    .addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+            // Email sent
+        }
+    }
+
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
+
+
+val db = FirebaseFirestore.getInstance()
+val user = hashMapOf("name" to "John", "age" to 30)
+db.collection("users")
+    .add(user)
+    .addOnSuccessListener { documentRef ->
+        // Document added
+    }
+
+
+db.collection("users")
+    .get()
+    .addOnSuccessListener { result ->
+        for (document in result) {
+            val name = document.getString("name")
+        }
+    }
+
+val updates = mapOf("age" to 35)
+db.collection("users").document("docId")
+    .update(updates)
+
+
+val updates = hashMapOf<String, Any>(
+    "age" to FieldValue.delete()
+)
+
+db.collection("users").document("docId")
+    .update(updates)
+
+
+val user = FirebaseAuth.getInstance().currentUser
+user?.delete()?.addOnCompleteListener { task ->
+    if (task.isSuccessful) {
+        // User deleted
+    } else {
+        // Error
+    }
+}
+
+
+//////////////////////////////////////////////////////////////
+*have to study implicit intents
+*have to deal with depreciated methods
+*Home tab adapter
+*room data base
+Done*sql
+
+Recycler view :
+
+class ItenmAdapter(List):RecyclerViewadapter<ItemAdapter.intemviewholder>
+{
+    itemViewHolder()//given as an arg to recycler clss
+    get the elements from the layout
+
+    onCreateViewHolder() ret inflating the individualitem
+
+    onBindViewHolder()
+    getItemCount()
+}
+
+}

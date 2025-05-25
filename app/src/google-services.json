@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1069582763925",
+    "firebase_url": "https://final-task-becdf-default-rtdb.firebaseio.com",
+    "project_id": "final-task-becdf",
+    "storage_bucket": "final-task-becdf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1069582763925:android:140238176d6e0ec419989c",
+        "android_client_info": {
+          "package_name": "com.example.smd_final"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2zzBwgBuX5lHvh158wQswkffzqHZhm8Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
