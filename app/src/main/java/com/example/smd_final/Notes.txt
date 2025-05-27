@@ -20,7 +20,6 @@ on Create() ie:
     OnPause()   --> OnCreate()
     OnStop()    --> OnCreate()
 
-//The thing to be considered here is there is no fucking return from onDestroy()
     OnStop()    --> OnRestart() --> OnStart()
     OnStop()    --> OnCreate()  (higher priority)
     OnPause()   --> OnCreate()  (higher priority)
